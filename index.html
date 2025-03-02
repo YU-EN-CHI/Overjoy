@@ -40,15 +40,21 @@
     <table id="bmslist">
     </table>
     <script language="javascript" type="text/javascript">
-      $(document).ready(function(){
-        $.getJSON($("meta[name=bmstable]").attr("content"), function(header){
-          //var last_update = new Date(header.update*1000);
-          //$("#update").html(last_update.toLocaleString());
-          $.getJSON(header.data_url, function(information){
-            makeBMSTable(information,header.symbol,header.update);
-          });
-        });
-      });
+$(document).ready(function(){
+  $.getJSON($("meta[name=bmstable]").attr("content"), function(header){
+    console.log("header.json 読み込み成功:", header);
+    
+    $.getJSON(header.data_url, function(information){
+      console.log("data.json 読み込み成功:", information);
+      
+      makeBMSTable(information, header.symbol, header.update);
+    }).fail(function(){
+      console.error("data.json の読み込みに失敗しました");
+    });
+  }).fail(function(){
+    console.error("header.json の読み込みに失敗しました");
+  });
+});
 
       function makeBMSTable(info, mark, update) {
         var x = "-1";
